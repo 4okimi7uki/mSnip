@@ -1,5 +1,5 @@
 {
-    "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+    "$schema": "https://raw.githubusercontent.com/tauri-apps/tauri/v2/schema.json",
     "productName": "mSnip",
     "version": "0.1.0",
     "identifier": "com.tauri.dev",
@@ -10,9 +10,12 @@
         "beforeBuildCommand": "pnpm build"
     },
     "app": {
+        "macOSPrivateApi": true,
         "windows": [
             {
+                "label": "main",
                 "title": "mSnip",
+                "url": "/",
                 "width": 800,
                 "height": 600,
                 "resizable": true,
