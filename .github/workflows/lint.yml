@@ -1,0 +1,69 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ts-lint:
+    name: ESLint & TypeCheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository & Setup pnpm
+        uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install deps
+        shell: bash
+        run: pnpm install --frozen-lockfile
+
+      - name: ESLint
+        shell: bash
+        run: pnpm lint
+
+      - name: Type check
+        shell: bash
+        run: pnpm typecheck
+
+  rust-lint:
+    name: Rust clippy & fmt
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src-tauri
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            src-tauri -> target
+
+      - name: fmt check
+        shell: bash
+        run: cargo fmt --all -- --check
+
+      - name: clippy (deny warnings)
+        shell: bash
+        run: cargo clippy --all-targets --all-features -- -D warnings
