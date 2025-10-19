@@ -1,7 +1,7 @@
 // src-tauri/src/main.rs
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{Manager};
+use tauri::Manager;
 use chrono::Local;
 use std::path::PathBuf;
 use tauri_plugin_shell::ShellExt;
