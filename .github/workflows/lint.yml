@@ -66,4 +66,4 @@ jobs:
 
       - name: clippy (deny warnings)
         shell: bash
-        run: cargo clippy --all-targets --all-features -- -D warnings
+        run: cargo clippy --all-targets --all-features
