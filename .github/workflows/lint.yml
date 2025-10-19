@@ -41,7 +41,7 @@ jobs:
 
   rust-lint:
     name: Rust clippy & fmt
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     defaults:
       run:
         working-directory: src-tauri
