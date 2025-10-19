@@ -1,24 +1,22 @@
-import { useRef } from "react";
-import { snipAndDraw } from "./snip";
+import { useState } from "react";
+import { onSnip } from "./snip";
 
 export default function App() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [imgUrl, setImgUrl] = useState<string | null>(null);
 
-    const onClick = async () => {
-        const canvas = canvasRef.current!;
-        // まずは固定座標でテスト（後で選択UIに差し替え）
-        await snipAndDraw(canvas, { x: 100, y: 100, w: 500, h: 300 });
+    const handleSnap = async () => {
+        const url = await onSnip();
+        setImgUrl(url);
     };
 
     return (
         <div style={{ padding: 24 }}>
-            <div>
-                <code>Debug tool: cmd + option + I</code>
-            </div>
-            <button onClick={onClick}>Snip!</button>
-            <div>
-                <canvas ref={canvasRef} style={{ border: "1px solid #ccc", marginTop: 12 }} />
-            </div>
+            <button onClick={handleSnap}>Rect Snip</button>
+            {imgUrl && (
+                <div style={{ marginTop: 8 }}>
+                    <img src={imgUrl} style={{ maxWidth: 600, border: "1px solid #008479ff" }} />
+                </div>
+            )}
         </div>
     );
 }
